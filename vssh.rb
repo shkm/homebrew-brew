@@ -1,8 +1,8 @@
 class Vssh < Formula
   desc "Fast `vagrant ssh` in the current directory."
   homepage "https://github.com/shkm/vssh"
-  url "https://github.com/shkm/vssh/archive/1.1.tar.gz"
-  sha256 "65e880c99242d517905b3102329d099fa165a31117fb51b47204df713d565794"
+  url "https://github.com/shkm/vssh/archive/1.2.tar.gz"
+  sha256 "833415d74298e2db6b676cad3833708f1993f24cafb4d53a03223f389155cdce"
 
   def install
     bin.install "vssh"
