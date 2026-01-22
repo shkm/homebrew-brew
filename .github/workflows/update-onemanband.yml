@@ -16,9 +16,13 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          LATEST=$(gh api repos/shkm/onemanband/releases/latest --jq '.tag_name' 2>/dev/null || echo '')
+          if ! LATEST=$(gh api repos/shkm/one-man-band/releases/latest --jq '.tag_name' 2>/dev/null); then
+            echo "No releases found"
+            echo "has_update=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
 
-          if [ -z "$LATEST" ]; then
+          if [ -z "$LATEST" ] || [ "$LATEST" = "null" ]; then
             echo "No releases found"
             echo "has_update=false" >> "$GITHUB_OUTPUT"
             exit 0
@@ -46,7 +50,7 @@ jobs:
         env:
           VERSION: ${{ steps.check.outputs.version }}
         run: |
-          BASE_URL="https://github.com/shkm/onemanband/releases/download/v${VERSION}"
+          BASE_URL="https://github.com/shkm/one-man-band/releases/download/v${VERSION}"
 
           echo "Downloading ARM DMG..."
           curl -fsSL "${BASE_URL}/One.Man.Band_${VERSION}_aarch64.dmg" -o arm.dmg
@@ -75,17 +79,17 @@ jobs:
 
             on_arm do
               sha256 "${SHA_ARM}"
-              url "https://github.com/shkm/onemanband/releases/download/v#{version}/One.Man.Band_#{version}_aarch64.dmg"
+              url "https://github.com/shkm/one-man-band/releases/download/v#{version}/One.Man.Band_#{version}_aarch64.dmg"
             end
 
             on_intel do
               sha256 "${SHA_INTEL}"
-              url "https://github.com/shkm/onemanband/releases/download/v#{version}/One.Man.Band_#{version}_x64.dmg"
+              url "https://github.com/shkm/one-man-band/releases/download/v#{version}/One.Man.Band_#{version}_x64.dmg"
             end
 
             name "One Man Band"
             desc "Desktop app for orchestrating git worktrees with integrated terminal support"
-            homepage "https://github.com/shkm/onemanband"
+            homepage "https://github.com/shkm/one-man-band"
 
             depends_on macos: ">= :ventura"
 
