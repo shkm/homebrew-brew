@@ -1,13 +1,13 @@
 cask "one-man-band" do
-  version "0.2.0"
+  version "0.3.0"
 
   on_arm do
-    sha256 "41dcccb68b53a5b1c9cfc16645cbc4c1cf5a96ce3a353e7560cf310dd0f45b52"
+    sha256 "064605be65447ae12283cabe74795360151f83c3dc9598b8d8634adfbfdd5fb3"
     url "https://github.com/shkm/one-man-band/releases/download/v#{version}/One.Man.Band_#{version}_aarch64.dmg"
   end
 
   on_intel do
-    sha256 "2d7b412e98895cd04e9c6ae90480a9a43cd99480c368e91aa6cba43d7ec2e090"
+    sha256 "56b47489e5a374cf0183a89fa414cd7beba21e1638d636d045ab86d766c37954"
     url "https://github.com/shkm/one-man-band/releases/download/v#{version}/One.Man.Band_#{version}_x64.dmg"
   end
 
