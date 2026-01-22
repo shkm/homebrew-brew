@@ -1,4 +1,4 @@
-name: Update onemanband cask
+name: Update one-man-band cask
 
 on:
   schedule:
@@ -32,8 +32,8 @@ jobs:
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "Latest release: $VERSION"
 
-          if [ -f Casks/onemanband.rb ]; then
-            CURRENT=$(grep 'version "' Casks/onemanband.rb | head -1 | sed 's/.*version "//;s/".*//')
+          if [ -f Casks/one-man-band.rb ]; then
+            CURRENT=$(grep 'version "' Casks/one-man-band.rb | head -1 | sed 's/.*version "//;s/".*//')
             echo "Current cask version: $CURRENT"
             if [ "$VERSION" = "$CURRENT" ]; then
               echo "Already up to date"
@@ -73,8 +73,8 @@ jobs:
         run: |
           mkdir -p Casks
 
-          cat > Casks/onemanband.rb << EOF
-          cask "onemanband" do
+          cat > Casks/one-man-band.rb << EOF
+          cask "one-man-band" do
             version "${VERSION}"
 
             on_arm do
@@ -102,7 +102,7 @@ jobs:
           EOF
 
           # Remove leading whitespace from heredoc
-          sed -i '' 's/^          //' Casks/onemanband.rb
+          sed -i '' 's/^          //' Casks/one-man-band.rb
 
       - name: Commit and push
         if: steps.check.outputs.has_update == 'true'
@@ -111,6 +111,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add Casks/onemanband.rb
-          git commit -m "Update onemanband to v${VERSION}"
+          git add Casks/one-man-band.rb
+          git commit -m "Update one-man-band to v${VERSION}"
           git push
