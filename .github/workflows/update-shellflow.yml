@@ -1,4 +1,4 @@
-name: Update one-man-band cask
+name: Update shellflow cask
 
 on:
   schedule:
@@ -16,7 +16,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if ! LATEST=$(gh api repos/shkm/one-man-band/releases/latest --jq '.tag_name' 2>/dev/null); then
+          if ! LATEST=$(gh api repos/shkm/shellflow/releases/latest --jq '.tag_name' 2>/dev/null); then
             echo "No releases found"
             echo "has_update=false" >> "$GITHUB_OUTPUT"
             exit 0
@@ -32,8 +32,8 @@ jobs:
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "Latest release: $VERSION"
 
-          if [ -f Casks/one-man-band.rb ]; then
-            CURRENT=$(grep 'version "' Casks/one-man-band.rb | head -1 | sed 's/.*version "//;s/".*//')
+          if [ -f Casks/shellflow.rb ]; then
+            CURRENT=$(grep 'version "' Casks/shellflow.rb | head -1 | sed 's/.*version "//;s/".*//')
             echo "Current cask version: $CURRENT"
             if [ "$VERSION" = "$CURRENT" ]; then
               echo "Already up to date"
@@ -50,16 +50,16 @@ jobs:
         env:
           VERSION: ${{ steps.check.outputs.version }}
         run: |
-          BASE_URL="https://github.com/shkm/one-man-band/releases/download/v${VERSION}"
+          BASE_URL="https://github.com/shkm/shellflow/releases/download/v${VERSION}"
 
           echo "Downloading ARM DMG..."
-          curl -fsSL "${BASE_URL}/One.Man.Band_${VERSION}_aarch64.dmg" -o arm.dmg
+          curl -fsSL "${BASE_URL}/Shellflow_${VERSION}_aarch64.dmg" -o arm.dmg
           SHA_ARM=$(shasum -a 256 arm.dmg | cut -d' ' -f1)
           echo "sha_arm=$SHA_ARM" >> "$GITHUB_OUTPUT"
           echo "ARM SHA256: $SHA_ARM"
 
           echo "Downloading Intel DMG..."
-          curl -fsSL "${BASE_URL}/One.Man.Band_${VERSION}_x64.dmg" -o intel.dmg
+          curl -fsSL "${BASE_URL}/Shellflow_${VERSION}_x64.dmg" -o intel.dmg
           SHA_INTEL=$(shasum -a 256 intel.dmg | cut -d' ' -f1)
           echo "sha_intel=$SHA_INTEL" >> "$GITHUB_OUTPUT"
           echo "Intel SHA256: $SHA_INTEL"
@@ -73,36 +73,36 @@ jobs:
         run: |
           mkdir -p Casks
 
-          cat > Casks/one-man-band.rb << EOF
-          cask "one-man-band" do
+          cat > Casks/shellflow.rb << EOF
+          cask "shellflow" do
             version "${VERSION}"
 
             on_arm do
               sha256 "${SHA_ARM}"
-              url "https://github.com/shkm/one-man-band/releases/download/v#{version}/One.Man.Band_#{version}_aarch64.dmg"
+              url "https://github.com/shkm/shellflow/releases/download/v#{version}/Shellflow_#{version}_aarch64.dmg"
             end
 
             on_intel do
               sha256 "${SHA_INTEL}"
-              url "https://github.com/shkm/one-man-band/releases/download/v#{version}/One.Man.Band_#{version}_x64.dmg"
+              url "https://github.com/shkm/shellflow/releases/download/v#{version}/Shellflow_#{version}_x64.dmg"
             end
 
-            name "One Man Band"
+            name "Shellflow"
             desc "Desktop app for orchestrating git worktrees with integrated terminal support"
-            homepage "https://github.com/shkm/one-man-band"
+            homepage "https://github.com/shkm/shellflow"
 
             depends_on macos: ">= :ventura"
 
-            app "One Man Band.app"
+            app "Shellflow.app"
 
             zap trash: [
-              "~/.config/onemanband",
+              "~/.config/shellflow",
             ]
           end
           EOF
 
           # Remove leading whitespace from heredoc
-          sed -i '' 's/^          //' Casks/one-man-band.rb
+          sed -i '' 's/^          //' Casks/shellflow.rb
 
       - name: Commit and push
         if: steps.check.outputs.has_update == 'true'
@@ -111,6 +111,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add Casks/one-man-band.rb
-          git commit -m "Update one-man-band to v${VERSION}"
+          git add Casks/shellflow.rb
+          git commit -m "Update shellflow to v${VERSION}"
           git push
