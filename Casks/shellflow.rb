@@ -1,13 +1,13 @@
 cask "shellflow" do
-  version "0.11.0"
+  version "0.12.0"
 
   on_arm do
-    sha256 "f39cfcba8b404b224ab0a7fb9897b2caa7a11a477794391d04218ac5285e2f94"
+    sha256 "77aeccb21d157933251deb0763fede4af5de0671effbac7473a490db6b579e55"
     url "https://github.com/shkm/shellflow/releases/download/v#{version}/Shellflow_#{version}_aarch64.dmg"
   end
 
   on_intel do
-    sha256 "b75461f5b38e78945ec8fc6988103ada6dbf0996ff86542ad7d1ab8056794cdf"
+    sha256 "bcced592c7a5240fdd4c6e683709cd5c48d65212d1439a630aa750384d61dd6a"
     url "https://github.com/shkm/shellflow/releases/download/v#{version}/Shellflow_#{version}_x64.dmg"
   end
 
