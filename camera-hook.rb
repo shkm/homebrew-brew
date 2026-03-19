@@ -6,7 +6,7 @@ class CameraHook < Formula
   version "2.0.0"
   license "MIT"
 
-  depends_on macos: ">= :sonoma"
+  depends_on macos: :sonoma
 
   def install
     bin.install "camera-hook"

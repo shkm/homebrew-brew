@@ -69,7 +69,7 @@ jobs:
             version "${VERSION}"
             license "MIT"
 
-            depends_on macos: ">= :sonoma"
+            depends_on macos: :sonoma
 
             def install
               bin.install "camera-hook"
