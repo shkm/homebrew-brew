@@ -6,6 +6,7 @@ class Brlaser < Formula
   version "6.2.8-20260927"
   sha256 "7f81a16ed6278151dfae6599c7e96c5cdd8bb444624ceedf2d3a1d9c6e0c19dc"
   license "GPL-2.0-or-later"
+  revision 1
   head "https://github.com/Owl-Maintain/brlaser.git", branch: "master"
 
   depends_on "cmake" => :build
@@ -16,16 +17,25 @@ class Brlaser < Formula
     system "cmake", "--build", "build"
     libexec.install "build/rastertobrlaser"
     (pkgshare/"ppd").install Dir["build/ppd/*.ppd"]
+
+    (bin/"brlaser-install").write <<~SH
+      #!/bin/sh
+      set -e
+      [ "$(id -u)" -eq 0 ] || exec sudo "$0" "$@"
+      install -d /Library/Printers/brlaser/Filter
+      install -m 755 #{opt_libexec}/rastertobrlaser /Library/Printers/brlaser/Filter/
+      install -m 644 #{opt_pkgshare}/ppd/*.ppd /Library/Printers/PPDs/Contents/Resources/
+      echo "brlaser installed to /Library/Printers"
+    SH
+    chmod 0755, bin/"brlaser-install"
   end
 
   def caveats
     <<~EOS
-      macOS only runs printer filters from system folders. To install the driver:
-        sudo install -d /Library/Printers/brlaser/Filter
-        sudo install -m 755 #{opt_libexec}/rastertobrlaser /Library/Printers/brlaser/Filter/
-        sudo install -m 644 #{opt_pkgshare}/ppd/*.ppd /Library/Printers/PPDs/Contents/Resources/
+      macOS only runs printer filters from system folders. To install the driver, run:
+        brlaser-install
 
-      Re-run these after upgrading.
+      Re-run it after upgrading.
     EOS
   end
 
